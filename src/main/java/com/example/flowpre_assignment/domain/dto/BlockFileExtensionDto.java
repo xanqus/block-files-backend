@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public record BlockFileExtensionDto(
         Long id,
         String extensionKeyword,
+        String type,
         LocalDateTime createdAt
 ) {
 }

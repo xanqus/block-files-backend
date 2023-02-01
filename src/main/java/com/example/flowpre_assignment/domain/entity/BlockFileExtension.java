@@ -21,5 +21,7 @@ public class BlockFileExtension {
 
     private String extensionKeyword;
 
+    private String type;
+
     private LocalDateTime createdAt;
 }

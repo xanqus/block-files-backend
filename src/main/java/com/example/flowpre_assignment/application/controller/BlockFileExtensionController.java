@@ -26,4 +26,10 @@ public class BlockFileExtensionController {
         blockFileExtensionService.addBlockFileExtension(createBlockExtensionForm.getExtensionKeyword());
     }
 
+    @PostMapping("/toggle")
+    public void toggleBlockFileExtension(@RequestBody CreateBlockExtensionForm createBlockExtensionForm) {
+        System.out.println("keyword: " + createBlockExtensionForm.getExtensionKeyword());
+        blockFileExtensionService.toggleBlockFileExtension(createBlockExtensionForm.getExtensionKeyword());
+    }
+
 }
