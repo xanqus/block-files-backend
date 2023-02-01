@@ -3,8 +3,10 @@ package com.example.flowpre_assignment.domain.service;
 import com.example.flowpre_assignment.domain.dto.BlockFileExtensionDto;
 import com.example.flowpre_assignment.domain.entity.BlockFileExtension;
 import com.example.flowpre_assignment.domain.repository.BlockFileExtensionRepository;
+import com.example.flowpre_assignment.standard.exception.AddDefaultExtensionException;
+import com.example.flowpre_assignment.standard.exception.AddDuplicateExtensionException;
 import com.example.flowpre_assignment.standard.exception.ErrorCode;
-import com.example.flowpre_assignment.standard.exception.MyCustomException;
+import com.example.flowpre_assignment.standard.exception.ExceededMaxQuantityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,10 +48,23 @@ public class BlockFileExtensionService {
     }
     public void addBlockFileExtension(String extensionName) {
 
+        Long extensionKeywordCount = blockFileExtensionRepository.countByType("custom");
+        Optional<BlockFileExtension> alreadyExists = blockFileExtensionRepository.findByExtensionKeyword(extensionName);
+        System.out.println("count: " + extensionKeywordCount);
 
         if(DefaultBlockFileExtensionList.hasExtensionKeyword(extensionName)) {
-            throw new MyCustomException(ErrorCode.DEFAULT_EXTENSION_ERROR);
+            throw new AddDefaultExtensionException(ErrorCode.DEFAULT_EXTENSION_ERROR);
         }
+
+        if(extensionKeywordCount >= 200) {
+            throw new ExceededMaxQuantityException(ErrorCode.EXCEEDED_MAX_QUANTITY);
+        }
+
+        if(alreadyExists.isPresent()) {
+            throw new AddDuplicateExtensionException(ErrorCode.ADD_DUPLICATE);
+        }
+
+
 
         BlockFileExtension blockFileExtension = BlockFileExtension
                 .builder()

@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class MyCustomException extends RuntimeException{
-
+public class ExceededMaxQuantityException extends RuntimeException{
     ErrorCode errorCode;
 }

@@ -9,4 +9,6 @@ public interface BlockFileExtensionRepository extends JpaRepository<BlockFileExt
     Optional<BlockFileExtension> findByExtensionKeyword(String extensionKeyword);
 
     void deleteByExtensionKeyword(String extensionKeyword);
+
+    Long countByType(String type);
 }
