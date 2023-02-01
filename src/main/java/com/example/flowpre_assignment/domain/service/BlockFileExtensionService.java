@@ -20,10 +20,10 @@ public class BlockFileExtensionService {
 
     private final BlockFileExtensionRepository blockFileExtensionRepository;
 
+
     enum DefaultBlockFileExtensionList {
         bat, cmd, com, cpl, exe, scr, js;
-        private static final Map<String, DefaultBlockFileExtensionList> nameToValueMap =
-                new HashMap<String, DefaultBlockFileExtensionList>();
+        private static final Map<String, DefaultBlockFileExtensionList> nameToValueMap = new HashMap<String, DefaultBlockFileExtensionList>();
 
         static {
             for (DefaultBlockFileExtensionList value : EnumSet.allOf(DefaultBlockFileExtensionList.class)) {
@@ -34,73 +34,62 @@ public class BlockFileExtensionService {
         public static boolean hasExtensionKeyword(String keyword) {
             return nameToValueMap.get(keyword) != null;
         }
-    };
+    }
+
+    ;
 
 
     public List<BlockFileExtensionDto> getAllBlockFileExtension() {
 
 
-        return blockFileExtensionRepository
-                .findAll()
-                .stream()
-                .map(this::toDto)
-                .toList();
+        return blockFileExtensionRepository.findAll().stream().map(this::toDto).toList();
     }
+
     public void addBlockFileExtension(String extensionName) {
 
         Long extensionKeywordCount = blockFileExtensionRepository.countByType("custom");
         Optional<BlockFileExtension> alreadyExists = blockFileExtensionRepository.findByExtensionKeyword(extensionName);
         System.out.println("count: " + extensionKeywordCount);
 
-        if(DefaultBlockFileExtensionList.hasExtensionKeyword(extensionName)) {
+        if (DefaultBlockFileExtensionList.hasExtensionKeyword(extensionName)) {
             throw new AddDefaultExtensionException(ErrorCode.DEFAULT_EXTENSION_ERROR);
         }
 
-        if(extensionKeywordCount >= 200) {
+        if (extensionKeywordCount >= 200) {
             throw new ExceededMaxQuantityException(ErrorCode.EXCEEDED_MAX_QUANTITY);
         }
 
-        if(alreadyExists.isPresent()) {
+        if (alreadyExists.isPresent()) {
             throw new AddDuplicateExtensionException(ErrorCode.ADD_DUPLICATE);
         }
 
 
-
-        BlockFileExtension blockFileExtension = BlockFileExtension
-                .builder()
-                .extensionKeyword(extensionName)
-                .type("custom")
-                .createdAt(LocalDateTime.now())
-                .build();
+        BlockFileExtension blockFileExtension = BlockFileExtension.builder().extensionKeyword(extensionName).type("custom").createdAt(LocalDateTime.now()).build();
 
         blockFileExtensionRepository.save(blockFileExtension);
 
     }
 
-    private BlockFileExtensionDto toDto(BlockFileExtension blockFileExtension) {
-        return new BlockFileExtensionDto(
-                blockFileExtension.getId(),
-                blockFileExtension.getExtensionKeyword(),
-                blockFileExtension.getType(),
-                blockFileExtension.getCreatedAt()
-        );
-    }
-
-
 
     @Transactional
     public void toggleBlockFileExtension(String extensionKeyword) {
         Optional<BlockFileExtension> _blockFileExtension = blockFileExtensionRepository.findByExtensionKeyword(extensionKeyword);
-        if(_blockFileExtension.isPresent()) {
+        if (_blockFileExtension.isPresent()) {
             blockFileExtensionRepository.deleteByExtensionKeyword(extensionKeyword);
         } else {
-            BlockFileExtension blockFileExtension = BlockFileExtension.builder()
-                    .extensionKeyword(extensionKeyword)
-                    .type("default")
-                    .createdAt(LocalDateTime.now())
-                    .build();
+            BlockFileExtension blockFileExtension = BlockFileExtension.builder().extensionKeyword(extensionKeyword).type("default").createdAt(LocalDateTime.now()).build();
             blockFileExtensionRepository.save(blockFileExtension);
         }
 
     }
+
+    @Transactional
+    public void deleteBlockFileExtensionById(Long id) {
+        blockFileExtensionRepository.deleteById(id);
+    }
+
+    private BlockFileExtensionDto toDto(BlockFileExtension blockFileExtension) {
+        return new BlockFileExtensionDto(blockFileExtension.getId(), blockFileExtension.getExtensionKeyword(), blockFileExtension.getType(), blockFileExtension.getCreatedAt());
+    }
+
 }

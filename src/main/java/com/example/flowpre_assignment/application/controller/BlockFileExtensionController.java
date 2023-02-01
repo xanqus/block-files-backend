@@ -22,14 +22,17 @@ public class BlockFileExtensionController {
 
     @PostMapping("")
     public void addBlockFileExtension(@RequestBody CreateBlockExtensionForm createBlockExtensionForm) {
-        System.out.println("keyword: " + createBlockExtensionForm.getExtensionKeyword());
         blockFileExtensionService.addBlockFileExtension(createBlockExtensionForm.getExtensionKeyword());
     }
 
     @PostMapping("/toggle")
     public void toggleBlockFileExtension(@RequestBody CreateBlockExtensionForm createBlockExtensionForm) {
-        System.out.println("keyword: " + createBlockExtensionForm.getExtensionKeyword());
         blockFileExtensionService.toggleBlockFileExtension(createBlockExtensionForm.getExtensionKeyword());
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteBlockFileExtensionById(@PathVariable Long id) {
+        blockFileExtensionService.deleteBlockFileExtensionById(id);
     }
 
 }
