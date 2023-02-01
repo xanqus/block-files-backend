@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class CreateBlockExtensionForm {
 
-    private String extensionName;
+    private String extensionKeyword;
 }

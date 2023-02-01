@@ -1,12 +1,12 @@
 package com.example.flowpre_assignment.application.controller;
 
+import com.example.flowpre_assignment.domain.dto.BlockFileExtensionDto;
 import com.example.flowpre_assignment.domain.dto.CreateBlockExtensionForm;
 import com.example.flowpre_assignment.domain.service.BlockFileExtensionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +15,15 @@ public class BlockFileExtensionController {
 
     private final BlockFileExtensionService blockFileExtensionService;
 
+    @GetMapping("")
+    public List<BlockFileExtensionDto> getAllBlockFileExtensions() {
+        return blockFileExtensionService.getAllBlockFileExtension();
+    }
+
     @PostMapping("")
     public void addBlockFileExtension(@RequestBody CreateBlockExtensionForm createBlockExtensionForm) {
-        blockFileExtensionService.addBlockFileExtension(createBlockExtensionForm.getExtensionName());
+        System.out.println("keyword: " + createBlockExtensionForm.getExtensionKeyword());
+        blockFileExtensionService.addBlockFileExtension(createBlockExtensionForm.getExtensionKeyword());
     }
 
 }

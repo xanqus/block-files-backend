@@ -19,7 +19,7 @@ public class BlockFileExtension {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String extensionName;
+    private String extensionKeyword;
 
     private LocalDateTime createdAt;
 }
