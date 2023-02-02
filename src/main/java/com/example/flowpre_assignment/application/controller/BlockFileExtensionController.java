@@ -4,8 +4,11 @@ import com.example.flowpre_assignment.domain.dto.BlockFileExtensionDto;
 import com.example.flowpre_assignment.domain.dto.CreateBlockExtensionForm;
 import com.example.flowpre_assignment.domain.service.BlockFileExtensionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.util.List;
 
 @RestController
@@ -21,7 +24,10 @@ public class BlockFileExtensionController {
     }
 
     @PostMapping("")
-    public void addBlockFileExtension(@RequestBody CreateBlockExtensionForm createBlockExtensionForm) {
+    public void addBlockFileExtension(@Valid @RequestBody CreateBlockExtensionForm createBlockExtensionForm, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
         blockFileExtensionService.addBlockFileExtension(createBlockExtensionForm.getExtensionKeyword());
     }
 
@@ -33,6 +39,11 @@ public class BlockFileExtensionController {
     @DeleteMapping("/{id}")
     public void deleteBlockFileExtensionById(@PathVariable Long id) {
         blockFileExtensionService.deleteBlockFileExtensionById(id);
+    }
+
+    @DeleteMapping("/all")
+    public void deleteAllBlockFileExtensions() {
+        blockFileExtensionService.deleteAllBlockFileExtensions();
     }
 
 }

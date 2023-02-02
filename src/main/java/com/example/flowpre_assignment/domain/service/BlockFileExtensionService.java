@@ -21,6 +21,8 @@ public class BlockFileExtensionService {
     private final BlockFileExtensionRepository blockFileExtensionRepository;
 
 
+
+
     enum DefaultBlockFileExtensionList {
         bat, cmd, com, cpl, exe, scr, js;
         private static final Map<String, DefaultBlockFileExtensionList> nameToValueMap = new HashMap<String, DefaultBlockFileExtensionList>();
@@ -63,7 +65,6 @@ public class BlockFileExtensionService {
             throw new AddDuplicateExtensionException(ErrorCode.ADD_DUPLICATE);
         }
 
-
         BlockFileExtension blockFileExtension = BlockFileExtension.builder().extensionKeyword(extensionName).type("custom").createdAt(LocalDateTime.now()).build();
 
         blockFileExtensionRepository.save(blockFileExtension);
@@ -86,6 +87,11 @@ public class BlockFileExtensionService {
     @Transactional
     public void deleteBlockFileExtensionById(Long id) {
         blockFileExtensionRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAllBlockFileExtensions() {
+        blockFileExtensionRepository.deleteAll();
     }
 
     private BlockFileExtensionDto toDto(BlockFileExtension blockFileExtension) {
